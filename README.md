@@ -20,7 +20,7 @@ py -3 -m pip install -U snowflake-util
 - Press F12 on your keyboard to open the dev console and go to the _Network_ tab
 - Open the private chat you want to pull the call logs out off
 - In the _Network_ you should see a **message?limit=50** in the _Name_ column (blue box)
-- You will need the channelID (top green box) and the authorization token (bottom green box) from **\*Request** Headers\*
+- You will need the channelID (top green box) and the authorization token (bottom green box) from ***Request** Headers*
   ![alt text](https://github.com/VincenzoPucci/discord_call_logs/blob/main/discordF12.PNG?raw=true)
 - Insert the values in the _cst.py_ file in the script
 - In the _cst.py_ file, set the start and end date with the START_DATE and END_DATE constants
