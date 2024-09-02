@@ -1,2 +1,4 @@
 call_log.json
 *.json
+
+__pycache__/
