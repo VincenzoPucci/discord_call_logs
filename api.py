@@ -167,7 +167,7 @@ def print_result():
 
 
 def main():
-    # get_messages_for_period()
+    get_messages_for_period()  # You can command out this line if you don't want to re-pull the data everytime
     calculate_data()
     print_result()
 
