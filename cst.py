@@ -17,5 +17,5 @@ END_DATE: datetime = datetime(year=2020, month=7, day=1)
 
 # Ex for start and end time:
 #   if periode you wanna search is from june 6th 2021 to november 5 2023
-#       START_TIME = datetime(year=2023, month=11, day=5)
-#       END_TIME = datetime(year=2021, month=6, day=6)
+#       START_DATE = datetime(year=2023, month=11, day=5)
+#       END_DATE = datetime(year=2021, month=6, day=6)
