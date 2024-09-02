@@ -22,6 +22,8 @@ HEADER = {"authorization": AUTH_TOKEN}
 # Setting up Snowflake to translate datetimes to snoflake timestamp that the API uses.
 SnowClass = snowflake.Snowflake()
 
+
+### Variables ###
 total_amount_of_call: int = 0
 """Total amount of individual calls between the 2 users"""
 
@@ -33,6 +35,9 @@ total_call_time_days: float = 0.0
 
 average_call_time_hours: float = 0.0
 """Average amount of time of calls between the 2 users in hours"""
+
+year_call_dict: dict = {}
+"""Dict reprendenting the amount of calls in a selected year"""
 
 
 def write_in_file(call_list: list):
@@ -125,6 +130,12 @@ def calculate_data():
     call_data: list[dict] = read_in_file()
     print("Starting to analyse the data")
 
+    # Setting the year in year_call_dict
+    year: int = END_DATE.year
+    while year <= START_DATE.year:
+        year_call_dict[year] = 0
+        year += 1
+
     # Setting total call amount
     global total_amount_of_call, total_call_time_hours, total_call_time_days, average_call_time_hours
     total_amount_of_call = len(call_data)
@@ -136,6 +147,7 @@ def calculate_data():
         end_time = convert_str_to_datetime(call["call"]["ended_timestamp"])
         delta = end_time-start_time
         total_time_seconds += delta.total_seconds()
+        year_call_dict[start_time.year] += 1
 
     total_call_time_hours = (total_time_seconds/60)/60
     total_call_time_days = total_call_time_hours/24
@@ -160,6 +172,8 @@ def print_result():
 
     # Prints of the data collected
     print(f"The period analysed is from {END_DATE} UTC to {START_DATE} UTC")
+    for year, call_amount in year_call_dict.items():
+        print(f"Total amount of calls for the year {year}: {call_amount} calls")
     print(f"Total amount of calls they have had: {total_amount_of_call} calls")
     print(f"Total amount of time in hours spent in call together: {call_time_hours_floor}h {call_time_hours_min}min")
     print(f"Total amount of time in days spent in call together: {call_time_days_floor} days {call_time_days_hours}h")
@@ -167,7 +181,7 @@ def print_result():
 
 
 def main():
-    get_messages_for_period()  # You can command out this line if you don't want to re-pull the data everytime
+    # get_messages_for_period()  # You can command out this line if you don't want to re-pull the data everytime
     calculate_data()
     print_result()
 
