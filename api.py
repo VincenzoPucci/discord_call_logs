@@ -17,7 +17,7 @@ CALL_MESSAGE_TYPE = 3
 
 # Discord request url and header
 DISCORD_URL = f"https://discord.com/api/v9/channels/{CHANNEL_ID}/messages"
-HEADER = {"authorization": AUTH_KEY}
+HEADER = {"authorization": AUTH_TOKEN}
 
 # Setting up Snowflake to translate datetimes to snoflake timestamp that the API uses.
 SnowClass = snowflake.Snowflake()
