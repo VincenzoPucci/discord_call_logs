@@ -90,10 +90,10 @@ def get_messages_for_period():
     # Setting up the variables needed
     call_list: list = []
     last_timestamp: datetime = datetime.utcnow()
-    discord_snowflake = get_snowflake_from_datetime(START_TIME)
+    discord_snowflake = get_snowflake_from_datetime(START_DATE)
 
     print(f"Starting to get the data from Discord, this might take a while...")
-    while last_timestamp > END_TIME:
+    while last_timestamp > END_DATE:
         # Doing the call and getting the result list
         res = requests.get(DISCORD_URL, headers=HEADER, params={"before": discord_snowflake, "limit": 100})
         message_list: list[dict] = res.json()
@@ -159,7 +159,7 @@ def print_result():
     av_call_time_hours_min: int = int((average_call_time_hours - av_call_time_hours_floor) * 60)
 
     # Prints of the data collected
-    print(f"The period analysed is from {END_TIME} UTC to {START_TIME} UTC")
+    print(f"The period analysed is from {END_DATE} UTC to {START_DATE} UTC")
     print(f"Total amount of calls they have had: {total_amount_of_call} calls")
     print(f"Total amount of time in hours spent in call together: {call_time_hours_floor}h {call_time_hours_min}min")
     print(f"Total amount of time in days spent in call together: {call_time_days_floor} days {call_time_days_hours}h")

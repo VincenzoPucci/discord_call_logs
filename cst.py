@@ -9,10 +9,10 @@ AUTH_TOKEN = "PUT YOUR TOKEN HERE"
 
 
 ### Time selection for the request ###
-START_TIME: datetime = datetime(year=2024, month=9, day=1)
+START_DATE: datetime = datetime(year=2024, month=9, day=1)
 """The start time, in UTC, to research, so the closest time you want to start the search or the end of the period of the search"""
 
-END_TIME: datetime = datetime(year=2020, month=7, day=1)
+END_DATE: datetime = datetime(year=2020, month=7, day=1)
 """The end time, in UTC, to research, so the farthest time you want to end the search or the start of the period of the search"""
 
 # Ex for start and end time:
