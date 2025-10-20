@@ -6,7 +6,6 @@ import snowflake  # py -3 -m pip install -U snowflake-util
 from datetime import datetime
 
 from cst import *
-from other import *
 
 
 ### YOU SHOULD NOT TOUCH THESE CONSTANTS ###
@@ -15,6 +14,9 @@ DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f+00:00"
 DATETIME_FORMAT_2 = "%Y-%m-%dT%H:%M:%S+00:00"
 DC_PATH = "./call_log.json"
 CALL_MESSAGE_TYPE = 3
+DEFAULT_CHANNEL_ID = "PUT YOUR CHANNEL ID HERE"
+DEFAULT_AUTH_TOKEN = "PUT YOUR TOKEN HERE"
+
 
 # Discord request url and header
 DISCORD_URL = f"https://discord.com/api/v9/channels/{CHANNEL_ID}/messages"
