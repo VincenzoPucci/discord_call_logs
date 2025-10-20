@@ -6,6 +6,7 @@ import snowflake  # py -3 -m pip install -U snowflake-util
 from datetime import datetime
 
 from cst import *
+from other import *
 
 
 ### YOU SHOULD NOT TOUCH THESE CONSTANTS ###
@@ -38,6 +39,12 @@ average_call_time_hours: float = 0.0
 
 year_call_dict: dict = {}
 """Dict reprendenting the amount of calls in a selected year"""
+
+call_started_dict: dict = {}
+"""Dict of amount of call initiated by a user"""
+
+clean_logs: bool = True
+"""Simplify the json log to data that is just needed"""
 
 
 def write_in_file(call_list: list):
@@ -83,7 +90,6 @@ def remove_not_needed(message: dict) -> dict:
 
 
 def convert_str_to_datetime(string_date: str) -> datetime:
-
     try:
         return datetime.strptime(string_date, DATETIME_FORMAT)
     except:
@@ -92,6 +98,12 @@ def convert_str_to_datetime(string_date: str) -> datetime:
 
 def get_messages_for_period():
     """Gets the data from Discord for the period and saves it in the file"""
+    # Making sure the channel id and auth token have been changed from default values
+    if CHANNEL_ID == DEFAULT_CHANNEL_ID:
+        raise ValueError("The CHANNEL_ID has not been changed in the cst.py file, please change it, cancelling run...")
+    if AUTH_TOKEN == DEFAULT_AUTH_TOKEN:
+        raise ValueError("The AUTH_TOKEN has not been changed in the cst.py file, please change it, cancelling run...")
+
     # Setting up the variables needed
     call_list: list = []
     last_timestamp: datetime = datetime.utcnow()
@@ -117,8 +129,19 @@ def get_messages_for_period():
         # Going through all the messages and getting only "type == 3" messages (call related messages)
         for message in message_list:
             if message["type"] == CALL_MESSAGE_TYPE:
-                message = remove_not_needed(message)
-                call_list.append(message)
+                if clean_logs:
+                    clean_message: dict = {
+                        "timestamp": message["timestamp"],
+                        "author": {"username": message["author"]["username"]},
+                        "call": {
+                            "ended_timestamp": message["call"]["ended_timestamp"],
+                            "participants": message["call"]["participants"],
+                        }
+                    }
+                    call_list.append(clean_message)
+                else:
+                    message = remove_not_needed(message)
+                    call_list.append(message)
 
     # Saving the messages by writing them in a file
     write_in_file(call_list)
@@ -136,18 +159,27 @@ def calculate_data():
         year_call_dict[year] = 0
         year += 1
 
-    # Setting total call amount
-    global total_amount_of_call, total_call_time_hours, total_call_time_days, average_call_time_hours
-    total_amount_of_call = len(call_data)
+    # Getting global variables
+    global total_amount_of_call, total_call_time_hours, total_call_time_days, average_call_time_hours, call_started_dict
 
     # Getting total call time
     total_time_seconds: float = 0.0
     for call in call_data:
+        if call["call"]["ended_timestamp"] == None:
+            # The call has no end_timestamp, probably cause no one answered, so we don't count it in the stats
+            continue
+
+        # The call is valid, so we add it to the stats
+        total_amount_of_call += 1
         start_time = convert_str_to_datetime(call["timestamp"])
         end_time = convert_str_to_datetime(call["call"]["ended_timestamp"])
         delta = end_time-start_time
         total_time_seconds += delta.total_seconds()
         year_call_dict[start_time.year] += 1
+        # Adding stats as to who started the call
+        if call["author"]["username"] not in call_started_dict.keys():
+            call_started_dict[call["author"]["username"]] = 0
+        call_started_dict[call["author"]["username"]] += 1
 
     total_call_time_hours = (total_time_seconds/60)/60
     total_call_time_days = total_call_time_hours/24
@@ -156,7 +188,7 @@ def calculate_data():
 
 def print_result():
     """Print the results in the console for easy reading"""
-    global total_amount_of_call, total_call_time_hours, total_call_time_days, average_call_time_hours
+    global total_amount_of_call, total_call_time_hours, total_call_time_days, average_call_time_hours, call_started_dict
 
     # Calculating the minutes for total_call_time_hours
     call_time_hours_floor: int = math.floor(total_call_time_hours)
@@ -172,8 +204,16 @@ def print_result():
 
     # Prints of the data collected
     print(f"The period analysed is from {END_DATE} UTC to {START_DATE} UTC")
+
     for year, call_amount in year_call_dict.items():
         print(f"Total amount of calls for the year {year}: {call_amount} calls")
+
+    for key, value in call_started_dict.items():
+        if USERNAME.get(key):
+            print(f"Total amount of calls started by {USERNAME[key]}: {value} calls")
+        else:
+            print(f"Total amount of calls started by {key}: {value} calls")
+
     print(f"Total amount of calls they have had: {total_amount_of_call} calls")
     print(f"Total amount of time in hours spent in call together: {call_time_hours_floor}h {call_time_hours_min}min")
     print(f"Total amount of time in days spent in call together: {call_time_days_floor} days {call_time_days_hours}h")
@@ -181,7 +221,8 @@ def print_result():
 
 
 def main():
-    get_messages_for_period()  # You can command out this line if you don't want to re-pull the data everytime
+    # You can command out this line if you don't want to re-pull the data everytime
+    get_messages_for_period()
     calculate_data()
     print_result()
 

@@ -24,6 +24,7 @@ py -3 -m pip install -U snowflake-util
   ![alt text](https://github.com/VincenzoPucci/discord_call_logs/blob/main/discordF12.PNG?raw=true)
 - Insert the values in the _cst.py_ file in the script
 - In the _cst.py_ file, set the start and end date with the START_DATE and END_DATE constants
+- (Optional) In the _cst.py_ file, set the USER_NAME dictionary to allow username "translation" in the output (ex: myFunkyDiscordUsername -> John Doe)
 - Run the script with the command
 
 ```console

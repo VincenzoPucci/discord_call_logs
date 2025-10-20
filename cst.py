@@ -7,9 +7,15 @@ CHANNEL_ID = "PUT YOUR CHANNEL ID HERE"
 AUTH_TOKEN = "PUT YOUR TOKEN HERE"
 """Your authorization token for to do the API call. You can get it using F12 in a browser on the Discord website"""
 
+USERNAME: dict = {
+    "USERNAME_1": "Your real name 1",
+    "USERNAME_2": "Your real name 2"
+}
+"""Translation dict to convert your usernames to your actual names. The key is the username, the value is your real name."""
+
 
 ### Time selection for the request ###
-START_DATE: datetime = datetime(year=2024, month=9, day=1)
+START_DATE: datetime = datetime(year=2025, month=10, day=20)
 """The start time, in UTC, to research, so the closest time you want to start the search or the end of the period of the search"""
 
 END_DATE: datetime = datetime(year=2020, month=7, day=1)
