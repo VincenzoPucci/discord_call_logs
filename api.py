@@ -23,8 +23,6 @@ HEADER = {"authorization": AUTH_TOKEN}
 # Setting up Snowflake to translate datetimes to snoflake timestamp that the API uses.
 SnowClass = snowflake.Snowflake()
 
-
-### Variables ###
 total_amount_of_call: int = 0
 """Total amount of individual calls between the 2 users"""
 
@@ -218,6 +216,7 @@ def print_result():
     print(f"Total amount of time in hours spent in call together: {call_time_hours_floor}h {call_time_hours_min}min")
     print(f"Total amount of time in days spent in call together: {call_time_days_floor} days {call_time_days_hours}h")
     print(f"Average duration of the calls for the period: {av_call_time_hours_floor}h {av_call_time_hours_min}min")
+    print(f"Number of message skipped for computing error: {computing_error}")
 
 
 def main():
