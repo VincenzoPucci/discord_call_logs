@@ -7,7 +7,6 @@ from datetime import datetime
 
 from cst import *
 
-
 ### YOU SHOULD NOT TOUCH THESE CONSTANTS ###
 ### The editable constants are in the cst.py file ###
 DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f+00:00"
@@ -17,12 +16,11 @@ CALL_MESSAGE_TYPE = 3
 DEFAULT_CHANNEL_ID = "PUT YOUR CHANNEL ID HERE"
 DEFAULT_AUTH_TOKEN = "PUT YOUR TOKEN HERE"
 
-
 # Discord request url and header
 DISCORD_URL = f"https://discord.com/api/v9/channels/{CHANNEL_ID}/messages"
 HEADER = {"authorization": AUTH_TOKEN}
 
-# Setting up Snowflake to translate datetimes to snoflake timestamp that the API uses.
+# Setting up Snowflake to translate datetimes to snowflake timestamp that the API uses.
 SnowClass = snowflake.Snowflake()
 
 total_amount_of_call: int = 0
